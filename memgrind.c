@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "mymalloc.h"
+#include "mymalloc.c"
 
 int main(int argc, char *argv[]) {
-  return 0;
+	test();
+  	return 0;
 }
