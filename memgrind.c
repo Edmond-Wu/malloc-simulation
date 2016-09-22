@@ -6,6 +6,6 @@
 
 int main(int argc, char *argv[]) {
 	malloc(atoi(argv[1]));
-	free(100);
+	//free(100);
   	return 0;
 }
