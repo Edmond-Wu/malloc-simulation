@@ -5,6 +5,7 @@
 #include "mymalloc.c"
 
 int main(int argc, char *argv[]) {
-	test();
+	malloc(atoi(argv[1]));
+	free(100);
   	return 0;
 }

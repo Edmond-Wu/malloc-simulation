@@ -3,6 +3,11 @@
 #include <ctype.h>
 #include "mymalloc.h"
 
-void test() {
-	printf("This is a test statement\n");
+void *malloc(size_t size) {
+	int s = size;
+	printf("Size: %d\n", s);
+}
+
+void free(void *ptr) {
+	printf("Freed\n");
 }
