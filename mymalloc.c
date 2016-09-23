@@ -11,7 +11,18 @@ void *mymalloc(size_t size) {
 }
 
 void myfree(void *ptr) {
-	printf("Freed\n");
+	if (ptr == NULL) {
+		fprintf(stderr, "Invalid free\n");
+	}
+}
+
+void allocate(int start, int size) {
+	if (size + start > 5000) {
+		fprintf(stderr, "Not enough space\n");
+	}
+	for (int i = start; i < size + start; i++) {
+		heap[i] = 'b';
+	}
 }
 
 char* get_heap() {
@@ -19,6 +30,7 @@ char* get_heap() {
 }
 
 void initialize_heap() {
+	//a for unused, b for used
 	for (int i = 0; i < 5000; i++) {
 		heap[i] = 'a';
 	}
@@ -30,4 +42,3 @@ void print_heap() {
 	}
 	printf("\n");
 }
-

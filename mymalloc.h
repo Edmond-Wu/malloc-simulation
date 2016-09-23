@@ -6,6 +6,8 @@ void *mymalloc(size_t size);
 
 void myfree(void *ptr);
 
+void allocate(int start, int size);
+
 char* get_heap();
 
 void initialize_heap();
