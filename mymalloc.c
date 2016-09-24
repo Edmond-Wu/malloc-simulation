@@ -6,6 +6,10 @@
 static char heap[5000];
 
 void *mymalloc(size_t size) {
+	if (size > 5000) {
+		fprintf(stderr, "Not enough space\n");
+		return NULL;
+	}
 	int s = size;
 	printf("Size: %d\n", s);
 }
