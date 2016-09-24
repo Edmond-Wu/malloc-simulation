@@ -8,10 +8,18 @@ static char heap[5000];
 void *mymalloc(size_t size) {
 	if (size > 5000) {
 		fprintf(stderr, "Not enough space\n");
-		return NULL;
 	}
-	int s = size;
-	printf("Size: %d\n", s);
+	else {
+		int s = size;
+		int first_open = 0;
+		for (int i = 0; i < 5000; i++) {
+			if (heap[i] == 'a') {
+				first_open = i;
+			}
+			allocate(first_open, s);
+		}
+		printf("Size: %d\n", s);
+	}
 }
 
 void myfree(void *ptr) {
