@@ -7,8 +7,10 @@ static char heap[5000];
 int free_space = 5000;
 
 void *mymalloc(size_t size, char *file, int line) {
-	if (size > free_space)
+	if (size > free_space) {
 		fprintf(stderr, "Not enough space\n");
+		return NULL;
+	}
 	else {
 		int s = size;
 		int first_open = 0;
@@ -16,9 +18,11 @@ void *mymalloc(size_t size, char *file, int line) {
 			if (heap[i] == 'a') {
 				first_open = i;
 				allocate(first_open, s);
+				break;
 			}
 		}
 		printf("Size: %d\n", s);
+		return &heap[first_open];
 	}
 }
 
