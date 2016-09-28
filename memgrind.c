@@ -7,8 +7,8 @@
 
 int main(int argc, char *argv[]) {
 	initialize_heap();
-	mymalloc(atoi(argv[1]));
-	myfree(100);
+	//mymalloc(atoi(argv[1]));
+	//myfree(100);
 	print_heap();
   	return 0;
 }

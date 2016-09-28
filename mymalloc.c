@@ -6,7 +6,7 @@
 static char heap[5000];
 int free_space = 5000;
 
-void *mymalloc(size_t size) {
+void *mymalloc(size_t size, char *file, int line) {
 	if (size > free_space)
 		fprintf(stderr, "Not enough space\n");
 	else {
@@ -22,7 +22,7 @@ void *mymalloc(size_t size) {
 	}
 }
 
-void myfree(void *ptr) {
+void myfree(void *ptr, char *file, int line) {
 	if (ptr == NULL)
 		fprintf(stderr, "Invalid free\n");
 }
