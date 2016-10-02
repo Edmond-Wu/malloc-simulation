@@ -32,12 +32,22 @@ void myfree(void *ptr, char *file, int line) {
 }
 
 void allocate(int start, int size) {
-	if (size + start > 5000)
-		fprintf(stderr, "Not enough space\n");
-	else {
+	if (enough_space(start, size) == 1) {
 		for (int i = start; i < size + start; i++)
 			heap[i] = 'b';
 		free_space -= size;
+	}
+}
+
+int enough_space(int start, int size) {
+	if (size + start > 5000)
+		return 0;
+	else {
+		for (int i = start; i < start + size; i++) {
+			if (heap[i] == 'b')
+				return 0;
+		}
+		return 1;
 	}
 }
 
