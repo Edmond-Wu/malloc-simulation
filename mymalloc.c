@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "mymalloc.h"
 
-static char heap[5000];
+static char heap[10000];
 int free_space = 5000;
 
 void *mymalloc(size_t size, char *file, int line) {
