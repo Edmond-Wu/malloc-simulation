@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -pedantic -ansi -std=c99
+CFLAGS = -g -Wall -pedantic -ansi -std=c11
 OBJS = memgrind.o mymalloc.o
 DEPS = mymalloc.h
 
