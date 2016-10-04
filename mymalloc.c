@@ -62,7 +62,7 @@ void initialize_heap() {
 }
 
 void print_heap() {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5000; i++)
 		printf("%c ", heap[i]);
 	printf("\n");
 }
