@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "mymalloc.h"
 #include <stddef.h>
+#include "mymalloc.h"
 
 static char heap[10000];
 int free_space = 5000;
