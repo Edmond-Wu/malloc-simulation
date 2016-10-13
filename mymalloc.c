@@ -6,7 +6,7 @@
 
 static char heap[5000];
 int free_space = 5000;
-struct MetaBlock *free_blocks = (void*)heap;
+MetaBlock *free_blocks = (void*)heap;
 
 void initialize_heap() {
 	free_blocks -> size = 5000 - sizeof(MetaBlock);
@@ -69,14 +69,14 @@ void *my_malloc(size_t size) {
 	//not enough
 	else {
 		result = NULL;
-		printf("Not enough space for allocation\n");
+		printf("Not enough space to be allocated\n");
 	}
 	return result;
 }
 
 void my_free(void *ptr) {
 	if (ptr == NULL)
-		fprintf(stderr, "Invalid free\n");
+		fprintf(stderr, "Null pointer\n");
 	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
 		MetaBlock *curr = ptr;
 		--curr;
@@ -84,7 +84,7 @@ void my_free(void *ptr) {
 		merge();
 	}
 	else
-		fprintf(stderr, "Invalid pointer allocation\n");
+		fprintf(stderr, "Invalid pointer to be freed\n");
 }
 
 char* get_heap() {

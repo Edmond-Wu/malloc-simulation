@@ -9,5 +9,7 @@
 int main(int argc, char *argv[]) {
 	for (int i = 0; i < 3000; i++)
 		malloc(1);
+	//char *p;
+	//p = (char *)malloc(5000);
   	return 0;
 }
