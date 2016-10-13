@@ -5,9 +5,9 @@
 #include <ctype.h>
 #include <stddef.h>
 
-void *mymalloc(size_t size, char *file, int line);
+void *my_malloc(size_t size);
 
-void myfree(void *ptr, char *file, int line);
+void my_free(void *ptr);
 
 void allocate(int start, int size);
 
