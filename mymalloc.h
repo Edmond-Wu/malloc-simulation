@@ -5,6 +5,12 @@
 #include <ctype.h>
 #include <stddef.h>
 
+typedef struct MetaBlock {
+	size_t size;
+	int free;
+	struct MetaBlock *next;
+} MetaBlock;
+
 void *my_malloc(size_t size);
 
 void my_free(void *ptr);

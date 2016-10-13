@@ -7,7 +7,6 @@
 #define free(x) my_free(x)
 
 int main(int argc, char *argv[]) {
-	initialize_heap();
 	for (int i = 0; i < 3000; i++) {
 		malloc(1);
 	}

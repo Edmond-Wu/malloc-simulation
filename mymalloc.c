@@ -4,10 +4,51 @@
 #include <stddef.h>
 #include "mymalloc.h"
 
-static char heap[10000];
+static char heap[5000];
 int free_space = 5000;
+struct MetaBlock *free_blocks = (void*)heap;
+
+void split(MetaBlock *too_big, size_t size) {                                                                                                                                                                MetaBlock *new = (void*)((void*)too_big + size + sizeof(MetaBlock));                                                                                                                                 new -> size = (too_big -> size) - size - sizeof(MetaBlock);                                                                                                                                          new -> free = 1;                                                                                                                                                                                     new -> next = too_big -> next;                                                                                                                                                                       too_big -> size = size;                                                                                                                                                                              too_big -> free = 0;                                                                                                                                                                                 too_big -> next = new;                                                                                                                                                                       }   
 
 void *my_malloc(size_t size) {
+	MetaBlock *curr, *prev;
+	void *result;
+
+	//initialize heap if not initialized
+	if (!free_blocks -> size) {
+		initialize_heap();
+		printf("Memory initialized\n");
+	}
+
+	//start of metadata blocks
+	curr = free_blocks;
+
+	while ((curr -> size < size || curr -> free == 0) && curr -> next != NULL) {
+		prev = curr;
+		curr = curr -> next;
+	}
+
+	//exact fit
+	if (curr -> size == size) {
+		curr -> free = 0;
+		result = (void*)(++curr);
+		printf("Memory allocated with exact fit\n");
+	}
+
+	//block bigger than requested
+	else if (curr -> size > size + sizeof(MetaBlock)) {
+		split(curr, size);
+		result = (void*)(++curr);
+		printf("Memory allocated and split\n");
+	}
+
+	//not enough
+	else {
+		result = NULL;
+		printf("Not enough space for allocation\n");
+	}
+	return result;
+	/*
 	if (size > free_space) {
 		fprintf(stderr, "Not enough space\n");
 		return NULL;
@@ -24,13 +65,23 @@ void *my_malloc(size_t size) {
 		}
 		return &heap[first_open];
 	}
+	*/
 }
 
 void my_free(void *ptr) {
 	if (ptr == NULL)
 		fprintf(stderr, "Invalid free\n");
+	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
+		MetaBlock *curr = ptr;
+		--curr;
+		curr -> free = 1;
+		merge();
+	}
+	else
+		fprintf(stderr, "Invalid pointer allocation\n");
 }
 
+/*
 void allocate(int start, int size) {
 	if (enough_space(start, size) == 1) {
 		for (int i = start; i < size + start; i++)
@@ -50,19 +101,26 @@ int enough_space(int start, int size) {
 		return 1;
 	}
 }
+*/
 
 char* get_heap() {
 	return heap;
 }
 
 void initialize_heap() {
-	//a for unused, b for used
-	for (int i = 0; i < 5000; i++)
-		heap[i] = 'a';
+	free_blocks -> size = 5000 - sizeof(MetaBlock);
+	free_blocks -> free = 1;
+	free_blocks -> next = NULL;
 }
 
-void print_heap() {
-	for (int i = 0; i < 5000; i++)
-		printf("%c ", heap[i]);
-	printf("\n");
+void merge() {
+	MetaBlock *curr;
+	curr = free_blocks;
+	while (curr -> next != NULL) {
+		if (curr -> free == 1 && curr -> next -> free == 1) {
+			curr -> size += curr -> next -> size + sizeof(MetaBlock);
+			curr -> next = curr -> next -> next;
+		}
+		curr = curr -> next;
+	}
 }
