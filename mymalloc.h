@@ -22,7 +22,7 @@ void initialize_heap();
  * @param too_big [pointer to the block]
  * @param size   [size to split]
  */
-void split(struct meta_block *tooBig, size_t size);
+void split(MetaBlock *too_big, size_t size);
 
 /**
  * Merges free blocks to combat defragmentation

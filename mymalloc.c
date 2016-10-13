@@ -27,17 +27,17 @@ void merge() {
 }
 
 void split(MetaBlock *too_big, size_t size){
-    struct meta_block *new = (void*)((void*)too_big + size + sizeof(MetaBlock));
-    new -> size = too_big -> size - size - sizeof(MetaBlock);
-    new -> free = 1;
-    new -> next = too_big -> next;
-    too_big -> size = size;
-    too_big -> free = 0;
-    too_big -> next = new;
+	MetaBlock *new = (void*)((void*)too_big + size + sizeof(MetaBlock));
+	new -> size = (too_big -> size) - size - sizeof(MetaBlock);
+	new -> free = 1;
+	new -> next = too_big -> next;
+	too_big -> size = size;
+	too_big -> free = 0;
+	too_big -> next = new;
 }
 
 void *my_malloc(size_t size) {
-	MetaBlock *curr, *prev;
+	MetaBlock *curr;
 	void *result;
 
 	//initialize heap if not initialized
@@ -49,10 +49,8 @@ void *my_malloc(size_t size) {
 	//start of metadata blocks
 	curr = free_blocks;
 
-	while ((curr -> size < size || curr -> free == 0) && curr -> next != NULL) {
-		prev = curr;
+	while ((curr -> size < size || curr -> free == 0) && curr -> next != NULL)
 		curr = curr -> next;
-	}
 
 	//exact fit
 	if (curr -> size == size) {
