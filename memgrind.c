@@ -11,6 +11,5 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < 3000; i++)
 		p = malloc(1);
 	free(p);
-	
   	return 0;
 }

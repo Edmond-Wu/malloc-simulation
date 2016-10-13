@@ -5,7 +5,6 @@
 #include "mymalloc.h"
 
 static char heap[5000];
-int free_space = 5000;
 MetaBlock *free_blocks = (void*)heap;
 
 void initialize_heap() {
