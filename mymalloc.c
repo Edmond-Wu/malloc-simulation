@@ -82,6 +82,7 @@ void my_free(void *ptr) {
 		--curr;
 		curr -> free = 1;
 		merge();
+		printf("Memory block freed\n");
 	}
 	else
 		fprintf(stderr, "Invalid pointer to be freed\n");
