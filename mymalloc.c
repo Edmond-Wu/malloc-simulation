@@ -8,7 +8,33 @@ static char heap[5000];
 int free_space = 5000;
 struct MetaBlock *free_blocks = (void*)heap;
 
-void split(MetaBlock *too_big, size_t size) {                                                                                                                                                                MetaBlock *new = (void*)((void*)too_big + size + sizeof(MetaBlock));                                                                                                                                 new -> size = (too_big -> size) - size - sizeof(MetaBlock);                                                                                                                                          new -> free = 1;                                                                                                                                                                                     new -> next = too_big -> next;                                                                                                                                                                       too_big -> size = size;                                                                                                                                                                              too_big -> free = 0;                                                                                                                                                                                 too_big -> next = new;                                                                                                                                                                       }   
+void initialize_heap() {
+	free_blocks -> size = 5000 - sizeof(MetaBlock);
+	free_blocks -> free = 1;
+	free_blocks -> next = NULL;
+}
+
+void merge() {
+	MetaBlock *curr;
+	curr = free_blocks;
+	while (curr -> next != NULL) {
+		if (curr -> free == 1 && curr -> next -> free == 1) {
+			curr -> size += curr -> next -> size + sizeof(MetaBlock);
+			curr -> next = curr -> next -> next;
+		}
+		curr = curr -> next;
+	}
+}
+
+void split(MetaBlock *too_big, size_t size){
+    struct meta_block *new = (void*)((void*)too_big + size + sizeof(MetaBlock));
+    new -> size = too_big -> size - size - sizeof(MetaBlock);
+    new -> free = 1;
+    new -> next = too_big -> next;
+    too_big -> size = size;
+    too_big -> free = 0;
+    too_big -> next = new;
+}
 
 void *my_malloc(size_t size) {
 	MetaBlock *curr, *prev;
@@ -48,24 +74,6 @@ void *my_malloc(size_t size) {
 		printf("Not enough space for allocation\n");
 	}
 	return result;
-	/*
-	if (size > free_space) {
-		fprintf(stderr, "Not enough space\n");
-		return NULL;
-	}
-	else {
-		int s = size;
-		int first_open = 0;
-		for (int i = 0; i < 5000; i++) {
-			if (heap[i] == 'a') {
-				first_open = i;
-				allocate(first_open, s);
-				break;
-			}
-		}
-		return &heap[first_open];
-	}
-	*/
 }
 
 void my_free(void *ptr) {
@@ -81,46 +89,6 @@ void my_free(void *ptr) {
 		fprintf(stderr, "Invalid pointer allocation\n");
 }
 
-/*
-void allocate(int start, int size) {
-	if (enough_space(start, size) == 1) {
-		for (int i = start; i < size + start; i++)
-			heap[i] = 'b';
-		free_space -= size;
-	}
-}
-
-int enough_space(int start, int size) {
-	if (size + start > 5000)
-		return 0;
-	else {
-		for (int i = start; i < start + size; i++) {
-			if (heap[i] == 'b')
-				return 0;
-		}
-		return 1;
-	}
-}
-*/
-
 char* get_heap() {
 	return heap;
-}
-
-void initialize_heap() {
-	free_blocks -> size = 5000 - sizeof(MetaBlock);
-	free_blocks -> free = 1;
-	free_blocks -> next = NULL;
-}
-
-void merge() {
-	MetaBlock *curr;
-	curr = free_blocks;
-	while (curr -> next != NULL) {
-		if (curr -> free == 1 && curr -> next -> free == 1) {
-			curr -> size += curr -> next -> size + sizeof(MetaBlock);
-			curr -> next = curr -> next -> next;
-		}
-		curr = curr -> next;
-	}
 }
