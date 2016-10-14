@@ -137,17 +137,25 @@ double workload_b() {
 }
 
 double workload_c() {
-	return 0;
+	clock_t begin = clock();
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
 
 double workload_d() {
-	return 0;
+	clock_t begin = clock();
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
 
 double workload_e() {
-	return 0;
+	clock_t begin = clock();
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
 
 double workload_f() {
-	return 0;
+	clock_t begin = clock();
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
