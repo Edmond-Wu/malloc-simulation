@@ -13,16 +13,6 @@ int main(int argc, char *argv[]) {
 		average_a += workload_a();
 	average_a /= 100;
 	printf("Average time for A: %f\n", average_a);
-	
-	for (int j = 0; j < 100; j++)
-		average_b += workload_b();
-	average_b /= 100;
-	printf("Average time for B: %f\n", average_b);
 
-	for (int a = 0; a < 100; a++)
-		average_c += workload_c();
-	average_c /= 100;
-	printf("Average time for C: %f\n", average_c);
-	
   	return 0;
 }

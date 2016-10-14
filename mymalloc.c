@@ -53,7 +53,7 @@ void *my_malloc(size_t size) {
 		//printf("Null pointer returned; %s, %d\n", __FILE__, __LINE__);
 		return result;
 	}
-	
+
 	//initialize heap if not initialized
 	if (!free_blocks -> size)
 		initialize_heap();
@@ -127,11 +127,27 @@ double workload_a() {
 
 double workload_b() {
 	clock_t begin = clock();
-	
+
 	char *p = malloc(1);
 	for (int i = 0; i < 3000; i++)
 		free(p);
 
 	clock_t end = clock();
 	return (double)(end - begin) / CLOCKS_PER_SEC;
+}
+
+double workload_c() {
+	return 0;
+}
+
+double workload_d() {
+	return 0;
+}
+
+double workload_e() {
+	return 0;
+}
+
+double workload_f() {
+	return 0;
 }
