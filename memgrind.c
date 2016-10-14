@@ -19,8 +19,6 @@ int main(int argc, char *argv[]) {
 		average_d += workload_d();
 		average_e += workload_e();
 		average_f += workload_f();
-	//	printf("F:%f\n",average_f);
-
 	}
 	average_a /= RUNS;
 	average_b /= RUNS;

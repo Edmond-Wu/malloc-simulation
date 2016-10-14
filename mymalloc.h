@@ -19,6 +19,13 @@ typedef struct MetaBlock {
 void initialize_heap();
 
 /**
+ * Checks if the pointer is in the heap
+ * @param  ptr [pointer to check]
+ * @return     [1 if it is, 0 if it isn't]
+ */
+int in_heap(void * ptr);
+
+/**
  * Splits memory blocks if the fit is too big
  * @param too_big [pointer to the block]
  * @param size   [size to split]

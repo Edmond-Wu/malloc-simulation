@@ -18,7 +18,7 @@ void initialize_heap() {
 }
 
 int in_heap(void * ptr) {
-	if ((void*)heap >= ptr || ptr >= (void*)(heap + 5000)) 
+	if ((void*)heap >= ptr || ptr >= (void*)(heap + 5000))
 		return 0;
 	return 1;
 }
@@ -31,7 +31,7 @@ void merge() {
 	MetaBlock *curr;
 	curr = free_blocks;
 	while (curr != NULL) {
-		if (!in_heap(curr)) 	
+		if (!in_heap(curr))
 			return;
 		else {
 			if (curr->free == 1 && curr->next->free == 1) {
@@ -155,7 +155,7 @@ double workload_c() {
 			arr[i] = malloc(1);
 			num_mallocs++;
 		}
-		else 
+		else
 			free(arr[i]);
 	}
 	//ensure that all pointers are free
@@ -173,7 +173,7 @@ double workload_d() {
 	void* arr[6000];
 	int num_mallocs = 0;
 	int capacity = MAX_SIZE;
-	
+
 	for (int i = 0; i < 6000; i++) {
 		int flip = rand() % 2;
 		if (flip == 1 && num_mallocs < 3000 && capacity > 0) {
@@ -182,14 +182,14 @@ double workload_d() {
 			num_mallocs++;
 			capacity -= (random_memory + sizeof(MetaBlock));
 		}
-		else 
+		else
 			free(arr[i]);
 	}
 	for (int j = 0; j < 6000; j++) {
 		if (arr[j] != NULL)
 			free(arr[j]);
 	}
-	
+
 	clock_t end = clock();
 	return (double)(end - begin) / (double)CLOCKS_PER_SEC;
 }
@@ -203,6 +203,5 @@ double workload_e() {
 double workload_f() {
 	clock_t begin = clock();
 	clock_t end = clock();
-	
 	return (double)(end - begin) / (double)CLOCKS_PER_SEC;
 }
