@@ -7,6 +7,7 @@
 #define malloc(x) my_malloc(x)
 #define free(x) my_free(x)
 
+const int MAX_SIZE = 4951;
 static char heap[5000];
 MetaBlock *free_blocks = (void*)heap;
 
@@ -18,7 +19,7 @@ void initialize_heap() {
 
 void merge() {
 	if (free_blocks == NULL) {
-		//fprintf(stderr, "Nothing to be freed; %s, %d\n", __FILE__, __LINE__);
+		fprintf(stderr, "Nothing to be freed; %s, %d\n", __FILE__, __LINE__);
 		return;
 	}
 	MetaBlock *curr;
@@ -138,12 +139,48 @@ double workload_b() {
 
 double workload_c() {
 	clock_t begin = clock();
+	
+	void* arr[6000];
+	int num_mallocs = 0;
+	for (int i = 0; i < 6000; i++) {
+		int flip = rand() % 2;
+		if (flip == 1 && num_mallocs < 3000) {
+			arr[i] = malloc(1);
+			num_mallocs++;
+		}
+		else
+			free(arr[i]);
+	}
+	//ensure that all pointers are free
+	for (int j = 0; j < 6000; j++) {
+		if (arr[j] != NULL)
+			free(arr[j]);
+	}
+
 	clock_t end = clock();
 	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
 
 double workload_d() {
 	clock_t begin = clock();
+	void* arr[6000];
+	int num_mallocs = 0;
+	int capacity = MAX_SIZE;
+	for (int i = 0; i < 6000; i++) {
+		int flip = rand() % 2;
+		if (flip == 1 && num_mallocs < 3000 && capacity > 0) {
+			int random_memory = rand() % 4951 + 1;
+			arr[i] = malloc(random_memory);
+			num_mallocs++;
+			capacity -= random_memory;
+		}
+		else
+			free(arr[i]);
+	}
+	for (int j = 0; j < 6000; j++) {
+		if (arr[j] != NULL)
+			free(arr[j]);
+	}
 	clock_t end = clock();
 	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
