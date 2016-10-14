@@ -25,6 +25,11 @@ int main(int argc, char *argv[]) {
 	average_f /= 100;
 
 	printf("Average time for A: %f\n", average_a);
+	printf("Average time for B: %f\n", average_b);
+	printf("Average time for C: %f\n", average_c);
+	printf("Average time for D: %f\n", average_d);
+	printf("Average time for E: %f\n", average_e);
+	printf("Average time for F: %f\n", average_f);
 
   	return 0;
 }
