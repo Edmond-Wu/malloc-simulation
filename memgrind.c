@@ -7,8 +7,14 @@
 #define free(x) my_free(x)
 
 int main(int argc, char *argv[]) {
+	//detectable errors
+	//testcase A
+	int x;
+	free(&x);
+
+	//testcase B
 	char *p;
-	for (int i = 0; i < 3000; i++)
-		p = malloc(1);
+	p = (char *)malloc(200);
+	free(p + 10);
   	return 0;
 }
