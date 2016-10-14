@@ -16,7 +16,7 @@ void initialize_heap() {
 void merge() {
 	MetaBlock *curr;
 	curr = free_blocks;
-	while (curr -> next != NULL) {
+	while (curr && curr -> next) {
 		if (curr -> free == 1 && curr -> next -> free == 1) {
 			curr -> size += curr -> next -> size + sizeof(MetaBlock);
 			curr -> next = curr -> next -> next;
@@ -42,7 +42,7 @@ void *my_malloc(size_t size) {
 	//initialize heap if not initialized
 	if (!free_blocks -> size) {
 		initialize_heap();
-		printf("Memory initialized\n");
+		printf("Memory initialized, %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//start of metadata blocks
@@ -55,36 +55,36 @@ void *my_malloc(size_t size) {
 	if (curr -> size == size) {
 		curr -> free = 0;
 		result = (void*)(++curr);
-		printf("Memory allocated with exact fit\n");
+		printf("Memory allocated with exact fit, %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//block bigger than requested
 	else if (curr -> size > size + sizeof(MetaBlock)) {
 		split(curr, size);
 		result = (void*)(++curr);
-		printf("Memory allocated and split\n");
+		printf("Memory allocated and split, %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//not enough
 	else {
 		result = NULL;
-		printf("Not enough space to be allocated\n");
+		printf("Not enough space to be allocated, %s, %d\n", __FILE__, __LINE__);
 	}
 	return result;
 }
 
 void my_free(void *ptr) {
 	if (ptr == NULL)
-		fprintf(stderr, "Null pointer\n");
+		fprintf(stderr, "Null pointer, %s, %d\n", __FILE__, __LINE__);
 	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
 		MetaBlock *curr = ptr;
 		--curr;
 		curr -> free = 1;
 		merge();
-		printf("Memory block freed\n");
+		printf("Memory block freed, %s, %d\n", __FILE__, __LINE__);
 	}
 	else
-		fprintf(stderr, "Invalid pointer to be freed\n");
+		fprintf(stderr, "Invalid pointer to be freed, %s, %d\n", __FILE__, __LINE__);
 }
 
 char* get_heap() {
