@@ -202,6 +202,10 @@ double workload_e() {
 
 double workload_f() {
 	clock_t begin = clock();
+	for (int i = 0; i < 3000; i++) {
+		char *p = (char*)malloc(1);
+		free(p);
+	}
 	clock_t end = clock();
 	return (double)(end - begin) / (double)CLOCKS_PER_SEC;
 }
