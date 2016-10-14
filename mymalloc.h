@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stddef.h>
+#include <time.h>
 
 //Struct for block linked list that contains data about the memory blocks
 typedef struct MetaBlock {
@@ -42,9 +43,15 @@ void *my_malloc(size_t size);
  */
 void my_free(void *ptr);
 
-/**
- * Returns the heap array
- * @return [heap character array]
- */
-char* get_heap();
+double workload_a();
+
+double workload_b();
+
+double workload_c();
+
+double workload_d();
+
+double workload_e();
+
+double workload_f();
 #endif

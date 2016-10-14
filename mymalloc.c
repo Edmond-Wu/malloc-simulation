@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stddef.h>
+#include <time.h>
 #include "mymalloc.h"
+#define malloc(x) my_malloc(x)
+#define free(x) my_free(x)
 
 static char heap[5000];
 MetaBlock *free_blocks = (void*)heap;
@@ -14,13 +17,15 @@ void initialize_heap() {
 }
 
 void merge() {
-	if (free_blocks == NULL)
-		fprintf(stderr, "Nothing to be freed; %s, %d", __FILE__, __LINE__);
+	if (free_blocks == NULL) {
+		//fprintf(stderr, "Nothing to be freed; %s, %d\n", __FILE__, __LINE__);
+		return;
+	}
 	MetaBlock *curr;
 	curr = free_blocks;
 	while (curr) {
 		if (curr -> next == NULL)
-			fprintf(stderr, "Nothing to merge; %s, %d", __FILE__, __LINE__);
+			return;
 		else {
 			if (curr -> free == 1 && curr -> next -> free == 1) {
 				curr -> size += curr -> next -> size + sizeof(MetaBlock);
@@ -43,13 +48,15 @@ void split(MetaBlock *too_big, size_t size){
 
 void *my_malloc(size_t size) {
 	MetaBlock *curr;
-	void *result;
-
-	//initialize heap if not initialized
-	if (!free_blocks -> size) {
-		initialize_heap();
-		printf("Memory initialized; %s, %d\n", __FILE__, __LINE__);
+	void *result = NULL;
+	if (size == 0) {
+		//printf("Null pointer returned; %s, %d\n", __FILE__, __LINE__);
+		return result;
 	}
+	
+	//initialize heap if not initialized
+	if (!free_blocks -> size)
+		initialize_heap();
 
 	//start of metadata blocks
 	curr = free_blocks;
@@ -61,38 +68,70 @@ void *my_malloc(size_t size) {
 	if (curr -> size == size) {
 		curr -> free = 0;
 		result = (void*)(++curr);
-		printf("Memory allocated with exact fit; %s, %d\n", __FILE__, __LINE__);
+		//printf("Memory allocated with exact fit; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//block bigger than requested
 	else if (curr -> size > size + sizeof(MetaBlock)) {
 		split(curr, size);
 		result = (void*)(++curr);
-		printf("Memory allocated and split; %s, %d\n", __FILE__, __LINE__);
+		//printf("Memory allocated and split; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//not enough
-	else {
-		result = NULL;
-		printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
-	}
+	//else
+		//printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
+
 	return result;
 }
 
 void my_free(void *ptr) {
-	if (ptr == NULL)
-		fprintf(stderr, "Null pointer; %s, %d\n", __FILE__, __LINE__);
+	if (ptr == NULL) {
+		//fprintf(stderr, "Invalid pointer to be freed; %s, %d\n", __FILE__, __LINE__);
+		return;
+	}
 	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
 		MetaBlock *curr = ptr;
 		--curr;
+
+		//if it's already free just exit
+		if (curr -> free == 1) {
+			//fprintf(stderr, "Block already freed; %s, %d\n", __FILE__, __LINE__);
+			return;
+		}
 		curr -> free = 1;
-		merge();
-		printf("Memory block freed; %s, %d\n", __FILE__, __LINE__);
+		void *next_pointer = curr -> next;
+		if (next_pointer != NULL)
+			merge();
+		//printf("Memory block freed; %s, %d\n", __FILE__, __LINE__);
 	}
-	else
-		fprintf(stderr, "Invalid pointer to be freed; %s, %d\n", __FILE__, __LINE__);
+	//else
+		//fprintf(stderr, "Invalid free; %s, %d\n", __FILE__, __LINE__);
 }
 
-char* get_heap() {
-	return heap;
+double workload_a() {
+	clock_t begin = clock();
+
+	void* arr[3000];
+
+	for (int i = 0; i < 3000; i++) {
+		arr[i] = malloc(1);
+	}
+	for (int j = 0; j < 3000; j++) {
+		free(arr[j]);
+	}
+
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
+}
+
+double workload_b() {
+	clock_t begin = clock();
+	
+	char *p = malloc(1);
+	for (int i = 0; i < 3000; i++)
+		free(p);
+
+	clock_t end = clock();
+	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
