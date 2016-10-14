@@ -50,15 +50,39 @@ void *my_malloc(size_t size);
  */
 void my_free(void *ptr);
 
+/**
+ * Malloc 1 byte 3000 times, then free it all
+ * @return [time it took to finish]
+ */
 double workload_a();
 
+/**
+ * Malloc 1 byte, then free it 3000 times
+ * @return [time it took to finish]
+ */
 double workload_b();
 
+/**
+ * Randomly malloc 1 byte or free 6000 times, then free it all
+ * @return [time it took to finish]
+ */
 double workload_c();
 
+/**
+ * Randomly malloc a random amount of memory or free 6000 times, then free it all
+ * @return [time it took to finish]
+ */
 double workload_d();
 
+/**
+ * [workload_e description]
+ * @return [time it took to finish]
+ */
 double workload_e();
 
+/**
+ * Malloc 1 byte then immediately free it, 3000 times
+ * @return [time it took to finish]
+ */
 double workload_f();
 #endif
