@@ -51,7 +51,7 @@ void *my_malloc(size_t size) {
 	MetaBlock *curr;
 	void *result = NULL;
 	if (size == 0) {
-		printf("Null pointer returned; __FILE__, __LINE__\n");
+		printf("Null pointer returned; %s, %d\n", __FILE__, __LINE__);
 		return result;
 	}
 
@@ -69,26 +69,26 @@ void *my_malloc(size_t size) {
 	if (curr -> size == size) {
 		curr -> free = 0;
 		result = (void*)(++curr);
-		printf("Memory allocated with exact fit; __FILE__, __LINE__\n");
+		printf("Memory allocated with exact fit; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//block bigger than requested
 	else if (curr -> size > size + sizeof(MetaBlock)) {
 		split(curr, size);
 		result = (void*)(++curr);
-		printf("Memory allocated and split; __FILE__, __LINE__\n");
+		printf("Memory allocated and split; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//not enough
 	else
-		printf("Not enough space to be allocated; __FILE__, __LINE__\n");
+		printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
 
 	return result;
 }
 
 void my_free(void *ptr) {
 	if (ptr == NULL) {
-		fprintf(stderr, "Invalid pointer to be freed; __FILE__, __LINE__\n");
+		fprintf(stderr, "Invalid pointer to be freed; %s, %d\n", __FILE__, __LINE__);
 		return;
 	}
 	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
@@ -97,17 +97,17 @@ void my_free(void *ptr) {
 
 		//if it's already free just exit
 		if (curr -> free == 1) {
-			fprintf(stderr, "Block already freed; __FILE__, __LINE__\n");
+			fprintf(stderr, "Block already freed; %s, %d\n", __FILE__, __LINE__);
 			return;
 		}
 		curr -> free = 1;
 		void *next_pointer = curr -> next;
 		if (next_pointer != NULL)
 			merge();
-		printf("Memory block freed; __FILE__, __LINE__\n");
+		printf("Memory block freed; %s, %d\n", __FILE__, __LINE__);
 	}
 	else
-		fprintf(stderr, "Invalid free; __FILE__, __LINE__\n");
+		fprintf(stderr, "Invalid free; %s, %d\n", __FILE__, __LINE__);
 }
 
 double workload_a() {
@@ -139,7 +139,7 @@ double workload_b() {
 
 double workload_c() {
 	clock_t begin = clock();
-	
+
 	void* arr[6000];
 	int num_mallocs = 0;
 	for (int i = 0; i < 6000; i++) {
@@ -166,7 +166,7 @@ double workload_d() {
 	void* arr[6000];
 	int num_mallocs = 0;
 	int capacity = MAX_SIZE;
-	
+
 	for (int i = 0; i < 6000; i++) {
 		int flip = rand() % 2;
 		if (flip == 1 && num_mallocs < 3000 && capacity > 0) {
@@ -182,7 +182,7 @@ double workload_d() {
 		if (arr[j] != NULL)
 			free(arr[j]);
 	}
-	
+
 	clock_t end = clock();
 	return (double)(end - begin) / CLOCKS_PER_SEC;
 }
