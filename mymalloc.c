@@ -88,7 +88,6 @@ void *my_malloc(size_t size) {
 	//not enough
 	else
 		printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
-		result = NULL;
 
 	return result;
 }
@@ -125,7 +124,7 @@ double workload_a() {
 	void* arr[3000];
 
 	for (int i = 0; i < 3000; i++) {
-		arr[i] = malloc(1);x
+		arr[i] = malloc(1);
 	}
 	for (int j = 0; j < 3000; j++) {
 		free(arr[j]);
@@ -200,21 +199,13 @@ double workload_d() {
 double workload_e() {
 	clock_t begin = clock();
 	char* array = malloc(3000);
-			 int i;
-
-			 for(i=0; i<3000; i++){
-							 printf("This is i: %d\n", i);
-							 array[i] = ('a');
-			 }
-
-			 for(i=0; i <3000; i++){
-							 printf("%c", array[i]);
-			 }
-
-			 for(int j=0; j<3000; j++){
-							 free(array[j]);
-			 }
-
+	for(int i = 0; i < 3000; i++) {
+		printf("This is i: %d\n", i);
+		array[i] = 'a';
+	}
+	for(int i = 0; i < 3000; i++)
+		printf("%c\n", array[i]);
+	free(array);
 	clock_t end = clock();
 	return (double)(end - begin) / (double)CLOCKS_PER_SEC;
 }
