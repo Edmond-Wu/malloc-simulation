@@ -124,7 +124,7 @@ void my_free(void *ptr) {
 
 double workload_a() {
 	clock_t begin = clock();
-
+	initialize_heap();
 	void* arr[3000];
 	for(int i = 0; i < 3000; i++)
 		arr[i] = 0;
@@ -142,7 +142,7 @@ double workload_a() {
 
 double workload_b() {
 	clock_t begin = clock();
-
+	initialize_heap();
 	char *p = malloc(1);
 	for (int i = 0; i < 3000; i++)
 		free(p);
@@ -154,7 +154,7 @@ double workload_b() {
 
 double workload_c() {
 	clock_t begin = clock();
-
+	initialize_heap();
 	void* arr[6000];
 	
 	for(int i = 0; i < 6000; i++){
@@ -183,6 +183,7 @@ double workload_c() {
 
 double workload_d() {
 	clock_t begin = clock();
+	initialize_heap();
 	void* arr[6000];
 	int num_mallocs = 0;
 	int capacity = MAX_SIZE;
@@ -216,6 +217,7 @@ double workload_d() {
 
 double workload_e() {
 	clock_t begin = clock();
+	initialize_heap();
 	char* array = malloc(3000);
 	for(int i = 0; i < 3000; i++) {
 		printf("This is i: %d\n", i);
@@ -230,6 +232,7 @@ double workload_e() {
 
 double workload_f() {
 	clock_t begin = clock();
+	initialize_heap();
 	for (int i = 0; i < 3000; i++) {
 		char *p = (char*)malloc(1);
 		free(p);
