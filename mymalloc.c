@@ -19,10 +19,8 @@ void initialize_heap() {
 }
 
 int in_heap(void * ptr) {
-	if ((void*)heap > ptr || ptr > (void*)(heap + 5000)){
+	if ((void*)heap > ptr || ptr > (void*)(heap + 5000))
 		return 0;
-
-	}
 	return 1;
 }
 
@@ -128,7 +126,8 @@ double workload_a() {
 	clock_t begin = clock();
 
 	void* arr[3000];
-	for(int i = 0; i < 3000; i++) arr[i] = 0;
+	for(int i = 0; i < 3000; i++)
+		arr[i] = 0;
 	
 	for (int i = 0; i < 3000; i++) {
 		arr[i] = malloc(1);
@@ -188,9 +187,8 @@ double workload_d() {
 	int num_mallocs = 0;
 	int capacity = MAX_SIZE;
 	
-	for(int i = 0; i < 6000;i++){
+	for(int i = 0; i < 6000;i++)
 		arr[i] = 0;
-	}
 
 	for (int i = 0; i < 6000; i++) {
 		int flip = rand() % 2;
@@ -205,8 +203,6 @@ double workload_d() {
 		else{
 			if (in_heap(arr[i]))
 				free(arr[i]);
-
-
 		}
 	}
 	for (int j = 0; j < 6000; j++) {
