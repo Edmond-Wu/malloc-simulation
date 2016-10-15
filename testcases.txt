@@ -1,2 +1,21 @@
 Assignment 1: A better malloc() and free()
 Group: Toni Au, Edmond Wu
+
+Workload E
+
+STEPS:
+1. Malloc() space for 3000 bytes
+2. Put 3000 character ‘a’ into an array
+3. Print the array
+4. Free the array
+
+This test case was relevant because it is the only case in which our malloc() was tested against a non-number.
+
+Average Time: 0.061562
+
+Workload F
+
+STEPS:
+Malloc()'d 1 byte pointer to a pointer char 'p'. Immediately free p afterwards.
+This test case is significant because it tested our meta-data blocks.
+Average Time: 0.056406
