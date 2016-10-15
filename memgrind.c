@@ -13,12 +13,12 @@
 int main(int argc, char *argv[]) {
 	double average_a = 0.0, average_b = 0.0, average_c = 0.0, average_d = 0.0, average_e = 0.0, average_f = 0.0;
 	for (int i = 0; i < RUNS; i++) {
-		//average_a += workload_a();
-		//average_b += workload_b();
-		//average_c += workload_c();
-		//average_d += workload_d();
+		average_a += workload_a();
+		average_b += workload_b();
+		average_c += workload_c();
+		average_d += workload_d();
 		average_e += workload_e();
-		//average_f += workload_f();
+		average_f += workload_f();
 	}
 	average_a /= RUNS;
 	average_b /= RUNS;

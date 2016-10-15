@@ -11,6 +11,7 @@ const int MAX_SIZE = 4951;
 static char heap[5000];
 MetaBlock *free_blocks = (void*)heap;
 
+
 void initialize_heap() {
 	free_blocks->size = 5000 - sizeof(MetaBlock);
 	free_blocks->free = 1;
@@ -18,8 +19,10 @@ void initialize_heap() {
 }
 
 int in_heap(void * ptr) {
-	if ((void*)heap >= ptr || ptr >= (void*)(heap + 5000))
+	if ((void*)heap > ptr || ptr > (void*)(heap + 5000)){
 		return 0;
+
+	}
 	return 1;
 }
 
@@ -31,15 +34,16 @@ void merge() {
 	MetaBlock *curr;
 	curr = free_blocks;
 	while (curr != NULL) {
-		if (!in_heap(curr))
+		if (!in_heap(curr)){
+		
 			return;
-		else {
-			if (curr->free == 1 && curr->next->free == 1) {
-				curr->size += curr->next->size + sizeof(MetaBlock);
+		}else {
+			if (curr->free == 1 && in_heap(curr->next) && curr->next->free == 1) {
+				curr->size += (curr->next->size + sizeof(MetaBlock));
 				curr->next = curr->next->next;
 			}
+			else curr = curr->next;
 		}
-		curr = curr->next;
 	}
 }
 
@@ -68,27 +72,27 @@ void *my_malloc(size_t size) {
 	//start of metadata blocks
 	curr = free_blocks;
 
-	while (((curr->size) < size || curr->free == 0) && curr->next != NULL)
+	while (((curr->size) < size || curr->free == 0) && in_heap( curr->next)){
 		curr = curr->next;
+	}
 
 	//exact fit
 	if (curr->size == size) {
 		curr->free = 0;
-		result = (void*)(++curr);
+		result = (void*)(curr + sizeof(MetaBlock));
 		printf("Memory allocated with exact fit; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//block bigger than requested
-	else if (curr->size > size + sizeof(MetaBlock)) {
+	else if (curr->size > (size + sizeof(MetaBlock))){
 		split(curr, size);
-		result = (void*)(++curr);
+		result = (void*)(curr + sizeof(MetaBlock));
 		printf("Memory allocated and split; %s, %d\n", __FILE__, __LINE__);
 	}
 
 	//not enough
 	else
 		printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
-
 	return result;
 }
 
@@ -97,23 +101,25 @@ void my_free(void *ptr) {
 		fprintf(stderr, "Invalid pointer to be freed; %s, %d\n", __FILE__, __LINE__);
 		return;
 	}
-	if ((void*)heap <= ptr && ptr <= (void*)(heap + 5000)) {
+	if (in_heap(ptr)) {
 		MetaBlock *curr = ptr;
-		--curr;
+		curr -= sizeof(MetaBlock);
 
 		//if it's already free just exit
 		if (curr->free == 1) {
 			fprintf(stderr, "Block already freed; %s, %d\n", __FILE__, __LINE__);
+			merge();
 			return;
 		}
 		curr->free = 1;
 		void *next_pointer = curr->next;
-		if (next_pointer != NULL)
-			merge();
+		//if (next_pointer != NULL)
+		merge();
 		printf("Memory block freed; %s, %d\n", __FILE__, __LINE__);
 	}
-	else
+	else{
 		fprintf(stderr, "Invalid free; %s, %d\n", __FILE__, __LINE__);
+	}
 }
 
 /* -- WORKLOAD -- */
@@ -122,7 +128,8 @@ double workload_a() {
 	clock_t begin = clock();
 
 	void* arr[3000];
-
+	for(int i = 0; i < 3000; i++) arr[i] = 0;
+	
 	for (int i = 0; i < 3000; i++) {
 		arr[i] = malloc(1);
 	}
@@ -150,6 +157,11 @@ double workload_c() {
 	clock_t begin = clock();
 
 	void* arr[6000];
+	
+	for(int i = 0; i < 6000; i++){
+		arr[i] = 0;
+	}	
+			
 	int num_mallocs = 0;
 	for (int i = 0; i < 6000; i++) {
 		int flip = rand() % 2;
@@ -162,7 +174,7 @@ double workload_c() {
 	}
 	//ensure that all pointers are free
 	for (int j = 0; j < 6000; j++) {
-		if (arr[j] != NULL)
+		if (in_heap(arr[j]))
 			free(arr[j]);
 	}
 
@@ -175,20 +187,30 @@ double workload_d() {
 	void* arr[6000];
 	int num_mallocs = 0;
 	int capacity = MAX_SIZE;
+	
+	for(int i = 0; i < 6000;i++){
+		arr[i] = 0;
+	}
 
 	for (int i = 0; i < 6000; i++) {
 		int flip = rand() % 2;
 		if (flip == 1 && num_mallocs < 3000 && capacity > 0) {
-			int random_memory = rand() % 4951 + 1;
+			int random_memory = rand() % capacity + 1;
 			arr[i] = malloc(random_memory);
-			num_mallocs++;
-			capacity -= (random_memory + sizeof(MetaBlock));
+			if(!in_heap(arr[i])){
+				num_mallocs++;
+				capacity -= (random_memory + sizeof(MetaBlock));
+			}
 		}
-		else
-			free(arr[i]);
+		else{
+			if (in_heap(arr[i]))
+				free(arr[i]);
+
+
+		}
 	}
 	for (int j = 0; j < 6000; j++) {
-		if (arr[j] != NULL)
+		if (in_heap(arr[j]))
 			free(arr[j]);
 	}
 
