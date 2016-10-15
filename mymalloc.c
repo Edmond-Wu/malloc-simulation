@@ -68,7 +68,7 @@ void *my_malloc(size_t size) {
 	//start of metadata blocks
 	curr = free_blocks;
 
-	while ((curr->size < size || curr->free == 0) && curr->next != NULL)
+	while (((curr->size) < size || curr->free == 0) && curr->next != NULL)
 		curr = curr->next;
 
 	//exact fit
@@ -88,6 +88,7 @@ void *my_malloc(size_t size) {
 	//not enough
 	else
 		printf("Not enough space to be allocated; %s, %d\n", __FILE__, __LINE__);
+		result = NULL;
 
 	return result;
 }
@@ -116,13 +117,15 @@ void my_free(void *ptr) {
 		fprintf(stderr, "Invalid free; %s, %d\n", __FILE__, __LINE__);
 }
 
+/* -- WORKLOAD -- */
+
 double workload_a() {
 	clock_t begin = clock();
 
 	void* arr[3000];
 
 	for (int i = 0; i < 3000; i++) {
-		arr[i] = malloc(1);
+		arr[i] = malloc(1);x
 	}
 	for (int j = 0; j < 3000; j++) {
 		free(arr[j]);
@@ -196,6 +199,22 @@ double workload_d() {
 
 double workload_e() {
 	clock_t begin = clock();
+	char* array = malloc(3000);
+			 int i;
+
+			 for(i=0; i<3000; i++){
+							 printf("This is i: %d\n", i);
+							 array[i] = ('a');
+			 }
+
+			 for(i=0; i <3000; i++){
+							 printf("%c", array[i]);
+			 }
+
+			 for(int j=0; j<3000; j++){
+							 free(array[j]);
+			 }
+
 	clock_t end = clock();
 	return (double)(end - begin) / (double)CLOCKS_PER_SEC;
 }
