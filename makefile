@@ -7,13 +7,13 @@ all: memgrind
 	rm *.o
 
 memgrind : $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o memgrind 
+	$(CC) $(CFLAGS) $(OBJS) -o memgrind
 
 memgrind.o: memgrind.c
 	$(CC) $(CFLAGS) -c memgrind.c
 
-mymalloc.o: mymalloc.c mymalloc.h	
-	$(CC) $(CFLAGS) -c mymalloc.c 
+mymalloc.o: mymalloc.c mymalloc.h
+	$(CC) $(CFLAGS) -c mymalloc.c
 
 clean:
 	rm memgrind
