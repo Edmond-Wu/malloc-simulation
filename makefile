@@ -6,7 +6,7 @@ DEPS = mymalloc.h
 all: memgrind
 	rm *.o
 
-memgrind : $(OBJS)
+memgrind: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o memgrind
 
 memgrind.o: memgrind.c
